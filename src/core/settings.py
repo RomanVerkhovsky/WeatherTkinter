@@ -7,7 +7,7 @@ class DataSettings:
 
         assert os.path.exists("settings.json") is False, FileNotFoundError
 
-        with open("gui/settings.json", "r", encoding="utf-8") as settings_json:
+        with open("src/gui/settings.json", "r", encoding="utf-8") as settings_json:
             self.settings = json.load(settings_json)
 
         self._size_window = self.settings["size_window"]

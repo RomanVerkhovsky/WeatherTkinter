@@ -1,4 +1,4 @@
-from gui.client_app import ClientApp
+from src.gui.client_app import ClientApp
 
 
 if __name__ == "__main__":

@@ -1,9 +1,9 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from gui.factory.frame_config import AConfigProduct, GreenConfigProduct, GreyConfigProduct
-from gui.factory.button import AButtonProduct, GreenButtonProduct, GreyButtonProduct
-from gui.factory.label import ALabelProduct, GreenLabelProduct, GreyLabelProduct
-from gui.factory.combobox import AComboboxProduct, GreenComboboxProduct, GreyComboboxProduct
+from src.gui.factory.frame_config import AConfigProduct, GreenConfigProduct, GreyConfigProduct
+from src.gui.factory.button import AButtonProduct, GreenButtonProduct, GreyButtonProduct
+from src.gui.factory.label import ALabelProduct, GreenLabelProduct, GreyLabelProduct
+from src.gui.factory.combobox import AComboboxProduct, GreenComboboxProduct, GreyComboboxProduct
 
 
 class IWidgetFactory(ABC):

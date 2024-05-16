@@ -1,7 +1,7 @@
 from __future__ import annotations
-from core.settings import DataSettings
-from gui.factory.factories import IWidgetFactory, GreenFactory, GreyFactory
-from core.test_data import DataWeather
+from src.core.settings import DataSettings
+from src.gui.factory.factories import IWidgetFactory, GreenFactory, GreyFactory
+from src.core.testdataserver import DataWeather
 from tkinter import *
 
 
