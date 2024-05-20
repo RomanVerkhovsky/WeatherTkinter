@@ -20,8 +20,7 @@ class GreenLabelProduct(ALabelProduct):
         super().__init__(text)
 
     def _configurate_object(self) -> tkinter.Label:
-        return tkinter.Label(text=self.text, padx=10, pady=10, font=("Arial", 15, "bold"),
-                             bg="white", bd=5, relief=tkinter.RAISED)
+        return tkinter.Label(text=self.text, padx=10, pady=10, font=("MV Boli", 20), fg="#c9af7b", background="#4f7942", )
 
 
 class GreyLabelProduct(ALabelProduct):
@@ -29,5 +28,5 @@ class GreyLabelProduct(ALabelProduct):
         super().__init__(text)
 
     def _configurate_object(self) -> tkinter.Label:
-        return tkinter.Label(text=self.text, padx=10, pady=10, font=("Arial", 15, "bold"),
+        return tkinter.Label(text=self.text, padx=10, pady=10, font=("Arial", 15),
                              bg="blue", bd=5, relief=tkinter.RAISED)

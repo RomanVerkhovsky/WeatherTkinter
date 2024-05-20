@@ -27,7 +27,10 @@ class GreenButtonProduct(AButtonProduct):
         super().__init__(text, click_handler)
 
     def _configurate_object(self) -> tkinter.Button:
-        return tkinter.Button(text=self.text, command=self._add_click)
+        return tkinter.Button(text=self.text, command=self._add_click,
+                              font=("MV Boli", 8),
+                              background="#bc8a65", foreground="white",
+                              bd=5, relief=tkinter.RAISED)
 
 
 class GreyButtonProduct(AButtonProduct):

@@ -2,46 +2,53 @@ from __future__ import annotations
 import requests
 from abc import ABC, abstractmethod
 
-from config import TOKEN
-
 
 # Интерфейс подписки
 class ISubject(ABC):
+    """
+    Интерфейс субъекта, за которым будут наблюдать
+    """
 
     @abstractmethod
-    def add(self, observer: IReportObserver):
-        pass
+    def add(self, observer: IReportObserver): pass
 
     @abstractmethod
-    def remove(self, observer: IReportObserver):
-        pass
-
-    def notify(self):
-        pass
+    def remove(self, observer: IReportObserver): pass
+    
+    @abstractmethod
+    def notify(self): pass
 
 
 # Интерфейс сервиса
 class IReportObserver(ABC):
+    """
+    Интерфейс передачи обновления отслеживаемой информации
+    """
     
     @abstractmethod
-    def update(self, user: ISubject):
-        pass
+    def update(self, user: ISubject): pass
 
 
 # Интерфейс пользователя
 class IUser(ABC):
+    """
+    Интерфейс пользователя для получения информации
+    """
 
     @abstractmethod
-    def get_info(self):
-        pass
+    def set_info(self): pass
 
 
 # Класс пользователя, реализует интерфейс пользователя и подписки
-class User(ISubject, IUser):
+class WeatherService(ISubject, IUser):
+    """
+    Класс пользователя, реализует методы связи с подписками и передачи информации
+    """
 
-    def __init__(self, city) -> None:
+    def __init__(self, TOKEN) -> None:
         super().__init__()
-        self.city = city
+
+        self.token = TOKEN
         self.weather_data = None
         self.__observers = []
 
@@ -68,47 +75,21 @@ class User(ISubject, IUser):
         for observer in self.__observers:
             observer.update()
 
-    def get_info(self, new_info):
+    def set_info(self, new_info):
+
         self.weather_data = new_info
         
+    # Этот метод связывать с кнопкой обновить погоду
+    def request_weather_api(self, city: str):
+        return self.__get_weather(city)
 
-class ReportService(IReportObserver):
-
-    def update(self, user: ISubject, ):
-        api_key = TOKEN
-        city_name = user.city
-
-    # Типовой пример, надо дописать
-        try:
-            weather_data = self.__get_weather(city_name, api_key)
-            print("Current Temperature:", weather_data['current']['temp_c'], "°C")
-            user.get_info(weather_data)
-            print('Info was delivered to user')
-        except Exception as e:
-            print(e)
-
-        
-    
     # Функция запроса через API
-    def __get_weather(self, city_name, api_key):
-        url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city_name}&aqi=no"
+    def __get_weather(self, city_name):
+
+        url = f"http://api.weatherapi.com/v1/current.json?key={self.token}&q={city_name}&aqi=no"
         response = requests.get(url)
+
         if response.status_code == 200:
             return response.json()
         else:
             raise Exception(f"Fail retrieve weather data: {response.status_code} {response.text}")
-
-def main(city):
-
-    service = ReportService()
-
-    app = User(city)
-    app.add(service)
-
-    service.update(app)
-
-    print(app.weather_data)
-
-
-city = 'Moscow'
-main(city)

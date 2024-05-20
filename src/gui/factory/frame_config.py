@@ -16,7 +16,7 @@ class GreenConfigProduct(AConfigProduct):
         super().__init__()
 
     def set_bgcolor(self) -> str:
-        return "green"
+        return "#4f7942"
 
 
 class GreyConfigProduct(AConfigProduct):
