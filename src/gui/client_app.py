@@ -117,7 +117,7 @@ class ClientApp(Frame):
         # наполнение
 
         # выбор города и обновление
-        cbox_city = self.factory.create_combobox()
+        cbox_city = self.factory.create_combobox(values=self.settings.get_cities())
 
         cbox_city.get_tk_object().place(x=10, y=15)
 
@@ -128,6 +128,16 @@ class ClientApp(Frame):
 
         btn_choice_city.get_tk_object().place(x=160, y=10)
 
+        # Добавление и удаление в избранное
+        btn_add_favour = self.factory.create_button("Добавить в избранное",
+                                                    click_handler=lambda:
+                                                    self.add_favour(self.weather.get_weather()['city']))
+
+        btn_add_favour.get_tk_object().place(x=10, y=50)
+
+        btn_del_favour = self.factory.create_button("Удалить из избранного", click_handler=lambda: None)
+        btn_del_favour.get_tk_object().place(x=10, y=90)
+
         # запрос на обновление данных
         btn_update_info = self.factory.create_button("Обновить",
                                                      click_handler=lambda: self.build_widgets())
@@ -135,19 +145,39 @@ class ClientApp(Frame):
 
         # создание лейблов
         label_1 = self.factory.create_label(f"{self.weather.get_weather()['city']}")
-        label_1.get_tk_object().place(relx=0.5, y=80, anchor=CENTER)
+        label_1.get_tk_object().place(relx=0.5, y=200, anchor=CENTER)
 
         label_2 = self.factory.create_label(f"Температура\n {self.weather.get_weather()['temp']}\N{DEGREE SIGN}")
-        label_2.get_tk_object().place(relx=0.5, y=150, anchor=CENTER)
+        label_2.get_tk_object().place(relx=0.5, y=300, anchor=CENTER)
 
         label_3 = self.factory.create_label(f"Влажность\n {self.weather.get_weather()['hum']}%")
-        label_3.get_tk_object().place(relx=0.5, y=250, anchor=CENTER)
+        label_3.get_tk_object().place(relx=0.5, y=400, anchor=CENTER)
 
         label_4 = self.factory.create_label(f"Ветер\n {self.weather.get_weather()['wind']} м/с")
-        label_4.get_tk_object().place(relx=0.5, y=350, anchor=CENTER)
+        label_4.get_tk_object().place(relx=0.5, y=500, anchor=CENTER)
 
         label_5 = self.factory.create_label(f"Давление\n {self.weather.get_weather()['pres']} мм")
-        label_5.get_tk_object().place(relx=0.5, y=450, anchor=CENTER)
+        label_5.get_tk_object().place(relx=0.5, y=600, anchor=CENTER)
+
+        # if ((label_1.text != "_ _" or label_1.text != ">> Выберите город <<")
+        #         and label_1.text not in self.settings.get_cities()):
+        #
+        #     new = self.settings.get_cities()
+        #
+        #     if len(new) != 5:
+        #         new.insert(0, label_1.text)
+        #     else:
+        #         new.pop()
+        #         new.insert(0, label_1.text)
+        #
+        #     self.settings.update_cities(new)
+
+    def add_favour(self, text: str):
+
+        if text in self.settings.get_cities():
+            return
+
+        self.settings.update_cities(text)
 
     def run(self):
         self.mainloop()

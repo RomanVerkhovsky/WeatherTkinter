@@ -83,13 +83,28 @@ class WeatherService(ISubject, IUser):
     def request_weather_api(self, city: str):
         return self.__get_weather(city)
 
-    # Функция запроса через API
+        # Функция запроса через API
     def __get_weather(self, city_name):
 
         url = f"http://api.weatherapi.com/v1/current.json?key={self.token}&q={city_name}&aqi=no"
-        response = requests.get(url)
 
-        if response.status_code == 200:
-            return response.json()
-        else:
-            raise Exception(f"Fail retrieve weather data: {response.status_code} {response.text}")
+        try:
+            response = requests.get(url, timeout=1, verify=True)
+
+            if response.status_code == 200:
+                return response.json()
+            else:
+                raise Exception(f"Fail retrieve weather data: {response.status_code} {response.text}")
+
+        except requests.exceptions.HTTPError as errh:
+            print("HTTP Error")
+            print(errh.args[0])
+
+        except requests.exceptions.ReadTimeout as errrt:
+            print("Time out")
+
+        except requests.exceptions.ConnectionError as conerr:
+            print("Connection error")
+
+        except requests.exceptions.RequestException as errex:
+            print("Exception request")
