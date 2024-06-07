@@ -109,7 +109,7 @@ class ClientApp(Frame):
         menu_theme.add_command(label="Зеленая", command=lambda: self.change_theme(theme="зеленая"))
         menu_theme.add_command(label="Серая", command=lambda: self.change_theme(theme="серая"))
 
-        menubar.add_cascade(label="Тема", menu=menu_theme)
+        menubar.add_cascade(label="Настройки", menu=menu_theme)
 
         self.root.config(background=self.factory.create_config().set_bgcolor(),
                          menu=menubar)
@@ -119,29 +119,32 @@ class ClientApp(Frame):
         # выбор города и обновление
         cbox_city = self.factory.create_combobox(values=self.settings.get_cities())
 
-        cbox_city.get_tk_object().place(x=10, y=15)
+        cbox_city.get_tk_object().place(x=60, y=100)
 
-        btn_choice_city = self.factory.create_button("Выбрать",
+        btn_choice_city = self.factory.create_button("Выбрать город",
                                                      click_handler=lambda:
                                                      (self.weather.set_city(cbox_city.get_tk_object().get()),
                                                       self.build_widgets()))
 
-        btn_choice_city.get_tk_object().place(x=160, y=10)
+        btn_choice_city.get_tk_object().place(x=220, y=100)
 
         # Добавление и удаление в избранное
-        btn_add_favour = self.factory.create_button("Добавить в избранное",
+        btn_add_favour = self.factory.create_button("Добавить\nв избранное ",
                                                     click_handler=lambda:
                                                     self.add_favour(self.weather.get_weather()['city']))
 
-        btn_add_favour.get_tk_object().place(x=10, y=50)
+        btn_add_favour.get_tk_object().place(x=10, y=5)
 
-        btn_del_favour = self.factory.create_button("Удалить из избранного", click_handler=lambda: None)
-        btn_del_favour.get_tk_object().place(x=10, y=90)
+        btn_del_favour = self.factory.create_button("Удалить\nиз избранного",
+                                                    click_handler=lambda:
+                                                    self.del_favour(cbox_city.get_tk_object().get()))
+
+        btn_del_favour.get_tk_object().place(x=110, y=5)
 
         # запрос на обновление данных
-        btn_update_info = self.factory.create_button("Обновить",
+        btn_update_info = self.factory.create_button("Обновить\nданные",
                                                      click_handler=lambda: self.build_widgets())
-        btn_update_info.get_tk_object().place(x=230, y=10)
+        btn_update_info.get_tk_object().place(x=320, y=5)
 
         # создание лейблов
         label_1 = self.factory.create_label(f"{self.weather.get_weather()['city']}")
@@ -159,25 +162,13 @@ class ClientApp(Frame):
         label_5 = self.factory.create_label(f"Давление\n {self.weather.get_weather()['pres']} мм")
         label_5.get_tk_object().place(relx=0.5, y=600, anchor=CENTER)
 
-        # if ((label_1.text != "_ _" or label_1.text != ">> Выберите город <<")
-        #         and label_1.text not in self.settings.get_cities()):
-        #
-        #     new = self.settings.get_cities()
-        #
-        #     if len(new) != 5:
-        #         new.insert(0, label_1.text)
-        #     else:
-        #         new.pop()
-        #         new.insert(0, label_1.text)
-        #
-        #     self.settings.update_cities(new)
+    def add_favour(self, city: str):
+        self.settings.add_city(city)
+        self.build_widgets()
 
-    def add_favour(self, text: str):
-
-        if text in self.settings.get_cities():
-            return
-
-        self.settings.update_cities(text)
+    def del_favour(self, city: str):
+        self.settings.remove_city(city)
+        self.build_widgets()
 
     def run(self):
         self.mainloop()
