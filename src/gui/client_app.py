@@ -3,42 +3,9 @@ from __future__ import annotations
 import tkinter
 
 from src.core.settings import DataSettings
+from src.core.data_weather import DataWeather
 from src.gui.factory.factories import IWidgetFactory, GreenFactory, GreyFactory
-from src.core.observer import WeatherService
 from tkinter import *
-
-
-class DataWeather:
-
-    def __init__(self, api_key: str) -> None:
-        self.observer = WeatherService(api_key)
-
-        self.data = {
-            "city": ">> Выберите город <<",
-            "temp": "_ _",
-            "hum": "_ _",
-            "pres": "_ _",
-            "wind": "_ _"
-        }
-
-    def set_city(self, city: str) -> None:
-        if city == "Введите город...":
-            return
-
-        weather = self.observer.request_weather_api(city)
-
-        if weather is not None:
-
-            self.data["city"] = weather["location"]["name"]
-            self.data["temp"] = weather["current"]["temp_c"]
-            self.data["hum"] = weather["current"]["humidity"]
-            self.data["pres"] = round(weather["current"]["pressure_mb"] * 0.75006)
-            self.data["wind"] = round(weather["current"]["wind_mph"] / 3.6)
-
-    def get_weather(self) -> dict:
-        return self.data
-
-    def update(self): pass
 
 
 # Главный класс-клиент для построения интерфейса и его конфигурации.
@@ -46,7 +13,6 @@ class ClientApp(Frame):
 
     settings = DataSettings()
     weather = DataWeather(settings.get_key())
-    # weather = WeatherService(settings.get_key())
 
     size_window = settings.get_size_window()
     title = 'Погода'

@@ -3,11 +3,13 @@ import os.path
 
 
 class DataSettings:
+    path_to_settings = "resource/config/settings.json"
+
     def __init__(self) -> None:
 
-        assert os.path.exists("src/gui/settings.json") is True, FileNotFoundError
+        assert os.path.exists(self.path_to_settings) is True, FileNotFoundError
 
-        with open("src/gui/settings.json", "r", encoding="utf8") as settings_json:
+        with open(self.path_to_settings, "r", encoding="utf8") as settings_json:
             self.settings = json.load(settings_json)
 
         self._size_window = self.settings["size_window"]
@@ -29,7 +31,7 @@ class DataSettings:
 
     def add_city(self, city: [str]) -> None:
 
-        assert os.path.exists("src/gui/settings.json") is True, FileNotFoundError
+        assert os.path.exists(self.path_to_settings) is True, FileNotFoundError
 
         if city in self._favour_cities or city == ">> Выберите город <<":
             return
@@ -38,12 +40,12 @@ class DataSettings:
 
         self.settings["favour_cities"] = self._favour_cities
 
-        with open("src/gui/settings.json", "w", encoding="utf8") as settings_json:
+        with open(self.path_to_settings, "w", encoding="utf8") as settings_json:
             json.dump(self.settings, settings_json)
 
     def remove_city(self, city: str):
 
-        assert os.path.exists("src/gui/settings.json") is True, FileNotFoundError
+        assert os.path.exists(self.path_to_settings) is True, FileNotFoundError
 
         if city not in self._favour_cities:
             return
@@ -52,5 +54,5 @@ class DataSettings:
 
         self.settings["favour_cities"] = self._favour_cities
 
-        with open("src/gui/settings.json", "w", encoding="utf8") as settings_json:
+        with open(self.path_to_settings, "w", encoding="utf8") as settings_json:
             json.dump(self.settings, settings_json)
